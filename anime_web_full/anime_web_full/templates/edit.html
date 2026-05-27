@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="form-box">
+    <h2 style="text-align:center;margin-bottom:20px">编辑动漫信息</h2>
+    <form method="post" action="/update/{{anime.id}}">
+        <input name="title" value="{{anime.title}}">
+        <input name="cover" value="{{anime.cover}}">
+        <input name="director" value="{{anime.director}}">
+        <input name="actors" value="{{anime.actors}}">
+        <input name="date" value="{{anime.release_date}}">
+        <input name="company" value="{{anime.company}}">
+        <input name="episodes_total" value="{{anime.episodes_total}}">
+        <input name="status" value="{{anime.status}}">
+        <input name="type" value="{{anime.type}}">
+        <input name="area" value="{{anime.area}}">
+        <input name="year" value="{{anime.year}}">
+        <textarea name="descr">{{anime.descr}}</textarea>
+        <button class="btn" style="width:100%">保存修改</button>
+    </form>
+</div>
+{% endblock %}

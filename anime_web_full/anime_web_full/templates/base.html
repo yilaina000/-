@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="{% if dark_mode %}dark{% endif %}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>动漫推荐网站</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body class="{% if dark_mode %}dark{% endif %}">
+<div class="progress-bar" id="progressBar"></div>
+
+<div class="header">
+    <div class="container wrap">
+        <h1><a href="/">🎬 动漫推荐网站</a></h1>
+        <div class="nav">
+            <a href="/">首页</a>
+            {% if session.username %}
+                <a href="/profile">个人中心</a>
+                <a href="/my/collect">我的收藏</a>
+                <a href="/my/history">浏览历史</a>
+                {% if session.is_admin==1 %}<a href="/admin">管理后台</a>{% endif %}
+                <a href="/logout">退出 {{session.username}}</a>
+            {% else %}
+                <a href="/login">登录</a>
+                <a href="/register">注册</a>
+            {% endif %}
+        </div>
+    </div>
+</div>
+
+{% if notice %}
+<div style="background:#fff8e0;padding:10px;text-align:center;border-bottom:1px solid #eee;">
+    📢 公告：{{notice.content}}
+</div>
+{% endif %}
+
+<div class="search-box">
+    <form action="/search">
+        <input type="text" name="wd" placeholder="请输入动漫名称搜索">
+        <button type="submit">搜索</button>
+    </form>
+</div>
+
+<div class="container">
+    {% block content %}{% endblock %}
+</div>
+
+<script>
+// 懒加载
+document.addEventListener("DOMContentLoaded", function() {
+    const imgs = document.querySelectorAll("img.lazy");
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const img = entry.target;
+                img.src = img.dataset.src;
+                img.classList.add("loaded");
+                observer.unobserve(img);
+            }
+        });
+    });
+    imgs.forEach(img => observer.observe(img));
+
+    // 进度条
+    window.addEventListener("scroll", () => {
+        const winH = window.innerHeight;
+        const docH = document.documentElement.scrollHeight - winH;
+        const scrolled = window.scrollY;
+        const percent = (scrolled / docH) * 100;
+        document.getElementById("progressBar").style.width = percent + "%";
+    });
+});
+</script>
+</body>
+</html>

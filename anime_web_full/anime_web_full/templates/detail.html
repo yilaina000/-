@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="detail-box">
+    <img class="cover-img lazy" data-src="{{anime.cover}}" alt="{{anime.title}}">
+    <div class="info">
+        <h2>{{anime.title}}</h2>
+        <p><strong>评分：</strong>{{avg}}</p>
+        <p><strong>导演：</strong>{{anime.director}}</p>
+        <p><strong>声优：</strong>{{anime.actors}}</p>
+        <p><strong>上映：</strong>{{anime.release_date}}</p>
+        <p><strong>状态：</strong>{{anime.status}} / {{anime.type}}</p>
+        <p><strong>制作：</strong>{{anime.company}}</p>
+
+        <div class="tags">
+            {% for t in tags %}
+            <span class="tag">{{t.name}}</span>
+            {% endfor %}
+        </div>
+
+        {% if session.username %}
+            <a href="/like_anime/{{anime.id}}" class="btn {% if is_liked %}red{% endif %}">
+                ❤️ {{like_num}}
+            </a>
+            {% if is_collect %}
+            <a href="/uncollect/{{anime.id}}" class="btn red">取消收藏</a>
+            {% else %}
+            <a href="/collect/{{anime.id}}" class="btn">收藏动漫</a>
+            {% endif %}
+
+            {% if not has_rated %}
+            <form method="post" action="/rate/{{anime.id}}" style="margin:10px 0">
+                <span>综合评分：</span>
+                <select name="score">
+                    {% for i in range(1,11) %}
+                    <option value="{{i}}">{{i}}</option>
+                    {% endfor %}
+                </select>
+                <br>
+                <small>剧情/画质/声优/音乐/节奏：</small>
+                <br>
+                <select name="plot">{% for i in range(1,11) %}<option>{{i}}</option>{% endfor %}</select>
+                <select name="art">{% for i in range(1,11) %}<option>{{i}}</option>{% endfor %}</select>
+                <select name="voice">{% for i in range(1,11) %}<option>{{i}}</option>{% endfor %}</select>
+                <select name="music">{% for i in range(1,11) %}<option>{{i}}</option>{% endfor %}</select>
+                <select name="pace">{% for i in range(1,11) %}<option>{{i}}</option>{% endfor %}</select>
+                <br>
+                <input type="text" name="reason" placeholder="评分理由（选填）">
+                <button type="submit" class="btn">提交评分</button>
+            </form>
+            {% else %}
+            <p style="color:green">✅ 你已完成评分</p>
+            {% endif %}
+        {% endif %}
+
+        <p style="margin-top:20px;line-height:1.8"><strong>简介：</strong>{{anime.descr}}</p>
+    </div>
+</div>
+
+{% if episodes %}
+<div class="comment-wrap">
+    <h3>📺 分集列表</h3>
+    {% for ep in episodes %}
+    <p><strong>第{{ep.ep_num}}集：</strong>{{ep.title}}（{{ep.air_date}}）</p>
+    {% endfor %}
+</div>
+{% endif %}
+
+{% if characters %}
+<div class="comment-wrap">
+    <h3>👤 角色列表</h3>
+    {% for c in characters %}
+    <p><strong>{{c.name}}</strong>（声优：{{c.voice}}）：{{c.descr}}</p>
+    {% endfor %}
+</div>
+{% endif %}
+
+<div class="comment-wrap">
+    <h3>💬 用户评论</h3>
+    {% if session.username %}
+    <form method="post" action="/comment/{{anime.id}}">
+        <textarea name="content" placeholder="请输入评论内容"></textarea>
+        <input type="hidden" name="parent_id" value="0">
+        <button class="btn" type="submit">发布评论</button>
+    </form>
+    {% endif %}
+
+    {% for c in comments %}
+    <div class="comment-item">
+        <strong>{{c.username}}：</strong>
+        <span>{{c.content}}</span>
+        {% if session.username and (session.user_id==c.user_id or session.is_admin==1) %}
+        <a class="del-comment" href="/del_comment/{{c.id}}/{{anime.id}}" onclick="return confirm('确定删除？')">删除</a>
+        {% endif %}
+    </div>
+    {% endfor %}
+</div>
+
+{% endblock %}

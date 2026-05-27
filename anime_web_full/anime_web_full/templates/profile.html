@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="form-box">
+    <h2>个人中心</h2>
+    <p><strong>用户名：</strong>{{user.username}}</p>
+    <p><strong>昵称：</strong>{{user.nickname or '未设置'}}</p>
+    <p><strong>等级：</strong>Lv.{{user.level}}</p>
+    <p><strong>收藏数：</strong>{{collect_num}}</p>
+    <p><strong>浏览历史：</strong>{{history_num}} 条</p>
+    <a href="/toggle_dark" class="btn">
+        {% if user.dark_mode==1 %}切换浅色模式{% else %}切换暗黑模式{% endif %}
+    </a>
+</div>
+{% endblock %}

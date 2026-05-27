@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block content %}
+<h2 style="margin:20px 0">后台管理中心</h2>
+
+<div class="form-box">
+    <h3>添加新动漫</h3>
+    <form method="post" action="/add_anime">
+        <input name="title" placeholder="动漫名称">
+        <input name="cover" placeholder="封面图片路径">
+        <input name="director" placeholder="导演">
+        <input name="actors" placeholder="声优">
+        <input name="date" placeholder="上映时间">
+        <input name="company" placeholder="制作公司">
+        <input name="episodes_total" placeholder="总集数">
+        <input name="status" placeholder="状态：连载/完结">
+        <input name="type" placeholder="类型：TV/剧场版">
+        <input name="area" placeholder="地区">
+        <input name="year" placeholder="年份">
+        <textarea name="descr" placeholder="简介"></textarea>
+        <button class="btn" style="width:100%">添加</button>
+    </form>
+</div>
+
+<h3 style="margin:20px 0">动漫管理列表</h3>
+<table>
+    <tr>
+        <th>名称</th>
+        <th>操作</th>
+    </tr>
+    {% for item in animes %}
+    <tr>
+        <td>{{item.title}}</td>
+        <td>
+            <a href="/edit/{{item.id}}" class="btn">编辑</a>
+            <a href="/del_anime/{{item.id}}" class="btn red" onclick="return confirm('确定删除？')">删除</a>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+
+<h3 style="margin:30px 0 10px">用户总数：{{users|length}}</h3>
+<h3 style="margin:10px 0">评论总数：{{comments|length}}</h3>
+
+{% endblock %}

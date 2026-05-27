@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block content %}
+<h2 style="margin:20px 0">我的收藏</h2>
+<div class="grid">
+    {% for item in list_data %}
+    <div class="card">
+        <a href="/anime/{{item.id}}">
+            <img data-src="{{item.cover}}" class="lazy" alt="{{item.title}}">
+            <h3>{{item.title}}</h3>
+        </a>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

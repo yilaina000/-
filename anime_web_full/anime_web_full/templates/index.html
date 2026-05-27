@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="carousel">
+    {% for item in carousels %}
+    <img data-src="{{item.cover}}" class="lazy" alt="{{item.title}}">
+    {% endfor %}
+</div>
+
+<div class="sort-box">
+    <a href="/?sort=default" class="{{'active' if sort=='default'}}">默认排序</a>
+    <a href="/?sort=new" class="{{'active' if sort=='new'}}">最新发布</a>
+    <a href="/?sort=score" class="{{'active' if sort=='score'}}">评分最高</a>
+</div>
+
+<div class="tags">
+    {% for t in tags %}
+    <a href="/tag/{{t.id}}" class="tag">{{t.name}}</a>
+    {% endfor %}
+</div>
+
+<h3>🔥 热门动漫榜</h3>
+<div class="grid" style="margin:15px 0;">
+    {% for item in hot_animes %}
+    <div class="card">
+        <a href="/anime/{{item.id}}">
+            <img data-src="{{item.cover}}" class="lazy" alt="{{item.title}}">
+            <h3>{{item.title}}</h3>
+        </a>
+    </div>
+    {% endfor %}
+</div>
+
+<h3>📺 全部动漫</h3>
+<div class="grid">
+    {% for item in animes %}
+    <div class="card">
+        <a href="/anime/{{item.id}}">
+            <img data-src="{{item.cover}}" class="lazy" alt="{{item.title}}">
+            <h3>{{item.title}}</h3>
+        </a>
+    </div>
+    {% endfor %}
+</div>
+
+<div style="text-align:center;margin:20px 0;">
+    {% if page>1 %}
+    <a href="/?page={{page-1}}&sort={{sort}}" class="btn">上一页</a>
+    {% endif %}
+    <span>第 {{page}} / {{total_pages}} 页</span>
+    {% if page<total_pages %}
+    <a href="/?page={{page+1}}&sort={{sort}}" class="btn">下一页</a>
+    {% endif %}
+</div>
+
+{% endblock %}
